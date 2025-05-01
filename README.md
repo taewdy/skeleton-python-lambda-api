@@ -7,15 +7,56 @@ A serverless API built with AWS Lambda and API Gateway that fetches photos from 
 ```
 .
 ├── src/                    # Source code
-│   ├── http_client.py     # HTTP client for external API calls
-│   ├── models.py          # Data models
-│   ├── services.py        # Business logic
-│   └── handlers.py        # Lambda handlers
+│   └── photos/            # Photos domain package
+│       ├── __init__.py    # Package initialization
+│       ├── http_client.py # HTTP client for external API calls
+│       ├── models.py      # Data models
+│       ├── services.py    # Business logic
+│       └── handlers.py    # Lambda handlers
 ├── tests/                 # Test files
 ├── infrastructure/        # Terraform configuration
 ├── .github/workflows/     # CI/CD pipeline
 ├── requirements.txt       # Python dependencies
 └── pyproject.toml         # Project configuration
+```
+
+### Structure Rationale
+
+The project follows a domain-driven structure under `src/photos/` rather than a deeper nested structure. This approach was chosen because:
+
+1. **Single Domain Focus**: All components are part of the same domain (photos)
+2. **Clear Relationships**: Components are closely related and have clear dependencies
+3. **Simplicity**: The codebase is relatively small and focused
+4. **Pythonic**: Follows Python's "flat is better than nested" principle
+5. **Maintainability**: Shorter import paths and easier navigation
+
+#### When to Consider Deeper Nesting
+
+A more nested structure might be appropriate when:
+- Multiple distinct domains exist (e.g., photos, users, auth)
+- Complex subsystems within a domain
+- Large codebases with many related components
+- Need to group related functionality
+
+Example of a more nested structure for larger projects:
+```
+src/
+├── photos/
+│   ├── client/
+│   │   └── http_client.py
+│   ├── models/
+│   │   └── photo.py
+│   ├── services/
+│   │   └── photo_service.py
+│   └── handlers/
+│       └── photo_handler.py
+├── users/
+│   ├── models/
+│   ├── services/
+│   └── handlers/
+└── common/
+    ├── utils/
+    └── exceptions/
 ```
 
 ## Features
