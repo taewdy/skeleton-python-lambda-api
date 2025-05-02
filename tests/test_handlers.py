@@ -1,7 +1,7 @@
 import json
 from unittest.mock import Mock, patch
 from src.photos.handlers import PhotoHandler
-from src.photos.http_client import HTTPClient
+from src.common.http_client import HTTPClient
 
 
 def test_get_photos_handler_success():

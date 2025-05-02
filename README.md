@@ -1,122 +1,101 @@
-# Photos API Lambda Function
+# Python Lambda API Project
 
-A serverless API built with AWS Lambda and API Gateway that fetches photos from JSONPlaceholder API.
+A Python-based Lambda API project that follows clean architecture principles and best practices.
 
 ## Project Structure
 
 ```
-.
-├── src/                    # Source code
-│   └── photos/            # Photos domain package
-│       ├── __init__.py    # Package initialization
-│       ├── http_client.py # HTTP client for external API calls
-│       ├── models.py      # Data models
-│       ├── services.py    # Business logic
-│       └── handlers.py    # Lambda handlers
-├── tests/                 # Test files
-├── infrastructure/        # Terraform configuration
-├── .github/workflows/     # CI/CD pipeline
-├── requirements.txt       # Python dependencies
-└── pyproject.toml         # Project configuration
-```
-
-### Structure Rationale
-
-The project follows a domain-driven structure under `src/photos/` rather than a deeper nested structure. This approach was chosen because:
-
-1. **Single Domain Focus**: All components are part of the same domain (photos)
-2. **Clear Relationships**: Components are closely related and have clear dependencies
-3. **Simplicity**: The codebase is relatively small and focused
-4. **Pythonic**: Follows Python's "flat is better than nested" principle
-5. **Maintainability**: Shorter import paths and easier navigation
-
-#### When to Consider Deeper Nesting
-
-A more nested structure might be appropriate when:
-- Multiple distinct domains exist (e.g., photos, users, auth)
-- Complex subsystems within a domain
-- Large codebases with many related components
-- Need to group related functionality
-
-Example of a more nested structure for larger projects:
-```
 src/
-├── photos/
-│   ├── client/
-│   │   └── http_client.py
-│   ├── models/
-│   │   └── photo.py
-│   ├── services/
-│   │   └── photo_service.py
-│   └── handlers/
-│       └── photo_handler.py
-├── users/
-│   ├── models/
-│   ├── services/
-│   └── handlers/
-└── common/
-    ├── utils/
-    └── exceptions/
+├── clients/                 # External service clients
+│   └── http/               # HTTP client implementation
+│       ├── __init__.py
+│       └── client.py
+├── photos/                 # Photos feature module
+│   ├── __init__.py
+│   ├── models.py          # Data models
+│   ├── services.py        # Business logic
+│   └── handlers.py        # Lambda handlers
+└── __init__.py
+
+tests/
+├── photos/                # Tests for photos feature
+│   ├── __init__.py
+│   ├── test_models.py
+│   ├── test_services.py
+│   └── test_handlers.py
+└── __init__.py
+
 ```
 
 ## Features
 
-- Fetches photos from JSONPlaceholder API
-- Clean architecture with separation of concerns
+- Clean Architecture with clear separation of concerns
+- Dependency Injection for better testability
+- Type hints for better code maintainability
 - Unit tests with pytest
-- Code coverage reporting
-- Linting with black, flake8, and mypy
-- CI/CD pipeline with GitHub Actions
-- Infrastructure as Code with Terraform
+- CI/CD pipeline with Terraform
 
-## Development
+## Setup
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-2. Run tests:
-   ```bash
-   pytest
-   ```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-3. Run linters:
-   ```bash
-   black src tests
-   flake8 src tests
-   mypy src
-   ```
-
-## Deployment
-
-The project is configured with GitHub Actions for CI/CD. The pipeline:
-
-1. Runs tests and linters
-2. Checks code coverage
-3. Deploys to AWS using Terraform
-
-To deploy manually:
-
-1. Configure AWS credentials
-2. Initialize Terraform:
-   ```bash
-   cd infrastructure
-   terraform init
-   ```
-3. Apply the configuration:
-   ```bash
-   terraform apply
-   ```
+3. Run tests:
+```bash
+pytest
+```
 
 ## API Endpoints
 
-- `GET /photos`: Returns a list of photos from JSONPlaceholder API
+### GET /photos
+Retrieves a list of photos from an external API.
 
-## Dependencies
+Response:
+```json
+[
+  {
+    "albumId": 1,
+    "id": 1,
+    "title": "accusamus beatae ad facilis cum similique qui sunt",
+    "url": "https://via.placeholder.com/600/92c952",
+    "thumbnailUrl": "https://via.placeholder.com/150/92c952"
+  }
+]
+```
 
-- Python 3.9+
-- AWS Lambda
-- AWS API Gateway
-- Terraform
-- GitHub Actions 
+## Development
+
+### Adding New Features
+
+1. Create a new feature module under `src/` (e.g., `src/users/`)
+2. Implement models, services, and handlers
+3. Add corresponding tests
+4. Update the README with new endpoints
+
+### Testing
+
+Run the test suite:
+```bash
+pytest
+```
+
+Run tests with coverage:
+```bash
+pytest --cov=src
+```
+
+## Deployment
+
+The project uses Terraform for infrastructure as code. See the `terraform/` directory for deployment configurations.
+
+## License
+
+MIT 

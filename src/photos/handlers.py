@@ -1,6 +1,6 @@
 import json
 from typing import Dict, Any, Optional
-from .http_client import HTTPClient
+from ..clients.http.client import HTTPClient
 from .services import PhotoService
 
 

@@ -1,5 +1,5 @@
 from typing import List
-from .http_client import HTTPClient
+from ..clients.http.client import HTTPClient
 from .models import Photo
 
 

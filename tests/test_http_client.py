@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock, patch
-from src.http_client import HTTPClient
+from src.infrastructure.http.client import HTTPClient
 
 
 @pytest.fixture
