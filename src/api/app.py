@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .clients.http.client import HTTPClient
-from .photos.services import PhotoService
-from .photos.models import Photo
+from ..clients.http.client import HTTPClient
+from ..photos.services import PhotoService
+from ..photos.models import Photo
 
 app = FastAPI(
     title="Photos API",

@@ -6,20 +6,22 @@ A Python-based Lambda API project that follows clean architecture principles and
 
 ```
 src/
-├── clients/                 # External service clients
-│   └── http/               # HTTP client implementation
+├── api/                    # FastAPI application
+│   ├── __init__.py
+│   └── app.py             # FastAPI application definition
+├── clients/               # External service clients
+│   └── http/             # HTTP client implementation
 │       ├── __init__.py
 │       └── client.py
-├── photos/                 # Photos feature module
+├── photos/               # Photos feature module
 │   ├── __init__.py
-│   ├── models.py          # Data models
-│   ├── services.py        # Business logic
-│   └── handlers.py        # Lambda handlers
-├── app.py                 # FastAPI application for local development
+│   ├── models.py        # Data models
+│   ├── services.py      # Business logic
+│   └── handlers.py      # Lambda handlers
 └── __init__.py
 
 tests/
-├── photos/                # Tests for photos feature
+├── photos/              # Tests for photos feature
 │   ├── __init__.py
 │   ├── test_models.py
 │   ├── test_services.py
