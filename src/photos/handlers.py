@@ -1,6 +1,7 @@
 import json
 from typing import Dict, Any, Optional
 from ..clients.http.client import HTTPClient
+from ..api.exceptions import APIError, ExternalServiceError
 from .services import PhotoService
 
 
@@ -10,7 +11,19 @@ class PhotoHandler:
         self.photo_service = PhotoService(self.http_client)
 
     def get_photos(self, event: Dict[str, Any], context: Any) -> Dict[str, Any]:
-        """Lambda handler for GET /photos endpoint."""
+        """
+        Lambda handler for GET /photos endpoint.
+        
+        Args:
+            event: Lambda event
+            context: Lambda context
+            
+        Returns:
+            Dict[str, Any]: Lambda response
+            
+        Raises:
+            ExternalServiceError: If there's an error fetching photos
+        """
         try:
             photos = self.photo_service.get_photos()
 
@@ -28,6 +41,20 @@ class PhotoHandler:
                     "thumbnailUrl": photo.thumbnail_url,
                 } for photo in photos]),
             }
+        except APIError as e:
+            return {
+                "statusCode": e.status_code,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                "body": json.dumps({
+                    "error": {
+                        "message": e.message,
+                        "details": e.details
+                    }
+                }),
+            }
         except Exception as e:
             return {
                 "statusCode": 500,
@@ -35,7 +62,12 @@ class PhotoHandler:
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                 },
-                "body": json.dumps({"error": str(e)}),
+                "body": json.dumps({
+                    "error": {
+                        "message": "An unexpected error occurred",
+                        "details": {"type": type(e).__name__, "error": str(e)}
+                    }
+                }),
             }
 
 

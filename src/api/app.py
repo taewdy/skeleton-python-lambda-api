@@ -1,5 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .exceptions import (
+    APIError,
+    ExternalServiceError,
+    api_error_handler,
+    http_exception_handler,
+    general_exception_handler,
+)
 from ..clients.http.client import HTTPClient
 from ..photos.services import PhotoService
 from ..photos.models import Photo
@@ -18,6 +25,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add exception handlers
+app.add_exception_handler(APIError, api_error_handler)
+app.add_exception_handler(Exception, general_exception_handler)
 
 # Initialize services
 http_client = HTTPClient("https://jsonplaceholder.typicode.com")

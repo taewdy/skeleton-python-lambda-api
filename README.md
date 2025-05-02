@@ -8,7 +8,8 @@ A Python-based Lambda API project that follows clean architecture principles and
 src/
 ├── api/                    # FastAPI application
 │   ├── __init__.py
-│   └── app.py             # FastAPI application definition
+│   ├── app.py             # FastAPI application definition
+│   └── exceptions.py      # Custom exceptions and handlers
 ├── clients/               # External service clients
 │   └── http/             # HTTP client implementation
 │       ├── __init__.py
@@ -38,6 +39,107 @@ tests/
 - Unit tests with pytest
 - CI/CD pipeline with Terraform
 - Local development with FastAPI
+- Comprehensive error handling
+
+## Error Handling
+
+The project implements a robust error handling system following these principles:
+
+### Error Hierarchy
+
+1. **Base Exceptions**:
+   - `APIError`: Base exception for all API errors
+   - `HTTPError`: Base exception for HTTP client errors
+
+2. **Specific Exceptions**:
+   - `ExternalServiceError`: For errors from external services
+   - `ValidationError`: For input validation errors
+
+### Error Response Format
+
+All errors follow a consistent JSON format:
+```json
+{
+  "error": {
+    "message": "Error message",
+    "details": {
+      "type": "error_type",
+      "status_code": 500,
+      "additional": "information"
+    }
+  }
+}
+```
+
+### Error Handling Layers
+
+1. **HTTP Client Layer**:
+   - Handles network and HTTP-specific errors
+   - Provides detailed error information including status codes
+   - Example: `HTTPError` with status code and response
+
+2. **Service Layer**:
+   - Transforms low-level errors into domain-specific errors
+   - Adds context to errors
+   - Example: `ExternalServiceError` with service-specific details
+
+3. **API Layer**:
+   - Global exception handlers
+   - Consistent error response format
+   - Proper HTTP status codes
+
+### Best Practices
+
+1. **Specific Error Types**:
+   ```python
+   try:
+       result = some_function()
+   except SpecificError as e:
+       # Handle specific error
+   except AnotherError as e:
+       # Handle another error
+   ```
+
+2. **Error Documentation**:
+   ```python
+   def some_function() -> Result:
+       """
+       Raises:
+           SpecificError: When something specific goes wrong
+           AnotherError: When something else goes wrong
+       """
+   ```
+
+3. **Error Context**:
+   - Include relevant details in error messages
+   - Provide actionable information
+   - Log appropriate error levels
+
+4. **Error Propagation**:
+   - Let errors propagate to appropriate handlers
+   - Transform errors at each layer
+   - Maintain error context
+
+### Example Error Handling
+
+```python
+# HTTP Client
+try:
+    response = http_client.get("/photos")
+except HTTPError as e:
+    # Handle HTTP-specific errors
+    raise ExternalServiceError(
+        f"Failed to fetch photos: {e.message}",
+        {"status_code": e.status_code, "response": e.response}
+    )
+
+# Service Layer
+try:
+    photos = photo_service.get_photos()
+except ExternalServiceError as e:
+    # Handle service errors
+    return {"error": e.message, "details": e.details}
+```
 
 ## Setup
 
