@@ -15,6 +15,7 @@ src/
 │   ├── models.py          # Data models
 │   ├── services.py        # Business logic
 │   └── handlers.py        # Lambda handlers
+├── app.py                 # FastAPI application for local development
 └── __init__.py
 
 tests/
@@ -34,6 +35,7 @@ tests/
 - Type hints for better code maintainability
 - Unit tests with pytest
 - CI/CD pipeline with Terraform
+- Local development with FastAPI
 
 ## Setup
 
@@ -52,6 +54,35 @@ pip install -r requirements.txt
 ```bash
 pytest
 ```
+
+## Local Development
+
+The project includes a FastAPI application for local development and testing.
+
+### Running the Local Server
+
+1. Start the development server:
+```bash
+python run_local.py
+```
+
+2. Access the API:
+- API endpoint: `http://localhost:8000/photos`
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
+3. Test with curl:
+```bash
+curl http://localhost:8000/photos
+```
+
+### Benefits of Local Development
+
+- Hot-reloading during development
+- Built-in OpenAPI documentation
+- Easy debugging
+- Type validation and serialization
+- CORS support out of the box
 
 ## API Endpoints
 
@@ -95,6 +126,25 @@ pytest --cov=src
 ## Deployment
 
 The project uses Terraform for infrastructure as code. See the `terraform/` directory for deployment configurations.
+
+### AWS Lambda Deployment
+
+The project is configured for AWS Lambda deployment with:
+- API Gateway integration
+- IAM roles and permissions
+- Environment variables
+
+To deploy:
+1. Configure AWS credentials
+2. Initialize Terraform:
+```bash
+cd infrastructure
+terraform init
+```
+3. Apply the configuration:
+```bash
+terraform apply
+```
 
 ## License
 

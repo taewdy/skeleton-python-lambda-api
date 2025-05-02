@@ -15,7 +15,7 @@ resource "aws_lambda_function" "photos_api" {
   filename         = "function.zip"
   function_name    = "photos-api"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "src.handlers.get_photos_handler"
+  handler          = "src.photos.handlers.get_photos_handler"
   runtime          = "python3.9"
   source_code_hash = filebase64sha256("function.zip")
 
